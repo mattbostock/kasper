@@ -48,14 +48,14 @@ archive: false
         	<!-- If we want to display author's name and bio -->
             {% if site.author %}
                 <section class="author">
-                	<header> <a href="{{ site.baseurl }}"> <img class="profile" src="/assets/images/profile.png" alt="Author's profile picture"></a></header>
+                    <header><a href="{{ site.baseurl }}"> <img class="profile" src="http://www.gravatar.com/avatar/0986de6d78499187b984cc060af0cf2e.jpg?s=100&d=blank" alt="Author's profile picture"></a></header>
                 	<article>
                 		<!-- Author Name -->
                     	<h4> {{ site.author }} </h4>
                     	<!-- Author Bio -->
                     	<p> 
-                    		Here goes the author description. You might want to place some links too in here
-                    	</p>
+                          <a href='mailto:matt@mattbostock.com'>Matt</a> is a technologist and operations engineer based in London, UK.
+                        </p>
                     </article>
                 </section>                
             {% endif %}
