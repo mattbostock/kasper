@@ -5,8 +5,13 @@ meta_description: "Tech notes from a web operations engineer"
 markdown: redcarpet
 pygments: true
 logo: false
-paginate: 15
+paginate: 10
+tz: Europe/London
+permalink: /:year/:month/:day/:title/
 
 # Details for the RSS feed generator
 url:            'blog url'
 author:         'Your Name'
+
+gems:
+  - jekyll-mentions
