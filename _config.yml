@@ -1,6 +1,6 @@
-name: Your New Jekyll Site
-description: Blogging about stuffs
-meta_description: "Your New Jekyll Site, Blogging about stuffs"
+name: Naming is hard
+description: Thoughts from a web ops engineer
+meta_description: "Tech notes from a web operations engineer"
 
 markdown: redcarpet
 pygments: true
