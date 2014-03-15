@@ -1,6 +1,6 @@
 ---
 layout: default
-disqus: false
+disqus_shortname: namingishard
 archive: false
 ---
 
@@ -76,12 +76,12 @@ archive: false
                 </a>
             </section>
             
-            {% if page.disqus %}
+            {% if page.disqus_shortname %}
             <section class="disqus">
             	<div id="disqus_thread"></div>
             	<script type="text/javascript">
 
-            	    var disqus_shortname = ''; 
+                      var disqus_shortname = '{{ page.disqus_shortname }}';
             		var disqus_developer = 0; // developer mode is on
             	    (function() {
             	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
