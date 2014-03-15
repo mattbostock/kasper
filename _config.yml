@@ -9,9 +9,9 @@ paginate: 10
 tz: Europe/London
 permalink: /:year/:month/:day/:title/
 
-# Details for the RSS feed generator
-url:            'blog url'
-author:         'Your Name'
+url: 'http://tech.mattbostock.com'
+author: 'Matt Bostock'
+email: 'matt@mattbostock.com'
 
 gems:
   - jekyll-mentions
