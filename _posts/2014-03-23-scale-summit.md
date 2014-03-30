@@ -1,8 +1,9 @@
 ---
 layout: post
-title:  "Scale Summit 2014: Performance and scalability unconference"
-date:   2014-03-23 23:05:00
+title: "Scale Summit 2014: Performance and scalability unconference"
+date: {}
 categories: talks ideas
+published: true
 ---
 
 I attended [Scale Summit](http://www.scalesummit.org/) 2014 in London on Friday. It was fantastic opportunity to share ideas and experiences in performance and stability in web operations.
@@ -208,7 +209,7 @@ I'd definitely recommend Scale Summit to anyone considering going in future; tha
 
 - Clear explanation when closing a PR due to poor quality or incompatible direction
 
-- ['Love your idiots'](http://shadow.cat/blog/matt-s-trout/love-your-idiots/'; encourage newbies to communicate with each other and later contribute
+- ['Love your idiots'](http://shadow.cat/blog/matt-s-trout/love-your-idiots/); encourage newbies to communicate with each other and later contribute
 
 
 ### Fourth Session: [AWS Cloud Formation](http://aws.amazon.com/cloudformation/) and Cloud Orchestration
@@ -386,4 +387,3 @@ I'd definitely recommend Scale Summit to anyone considering going in future; tha
 - Post receive hooks better than SCM polling
 
 - [Netflix plugin](https://wiki.jenkins-ci.org/display/JENKINS/Job+DSL+Plugin) for writing jobs in Groovy
-
