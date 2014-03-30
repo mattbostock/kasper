@@ -32,7 +32,7 @@ Note that this technique only works on files already checked in to a Git reposit
 Git will enter patch mode (`-p`), allowing you to interactively choose which hunks (parts) of the file you would like to stage for the comit:
 
 ```diff
-» git add -p
+» git commit -vp
 diff --git a/_posts/2014-03-19-git-editing-markdown.md b/_posts/2014-03-19-git-editing-markdown.md
 index 2f7eb76..41a2eb5 100644
 --- a/_posts/2014-03-19-git-editing-markdown.md
