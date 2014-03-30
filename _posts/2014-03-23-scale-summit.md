@@ -208,7 +208,7 @@ I'd definitely recommend Scale Summit to anyone considering going in future; tha
 
 - Clear explanation when closing a PR due to poor quality or incompatible direction
 
-- ['Love your idiots'](http://shadow.cat/blog/matt-s-trout/love-your-idiots/'; encourage newbies to communicate with each other and later contribute
+- ['Love your idiots'](http://shadow.cat/blog/matt-s-trout/love-your-idiots/); encourage newbies to communicate with each other and later contribute
 
 
 ### Fourth Session: [AWS Cloud Formation](http://aws.amazon.com/cloudformation/) and Cloud Orchestration
