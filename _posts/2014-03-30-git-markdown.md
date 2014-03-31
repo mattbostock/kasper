@@ -5,7 +5,7 @@ date:   2014-03-30 20:39:00
 categories: meta
 ---
 
-[Markdown](http://daringfireball.net/projects/markdown/dingus) is a [lightweight markup language](http://blog.codinghorror.com/is-html-a-humane-markup-language/) for writing formatted, semantic content. Because it's so lightweight, it's really easy to use.
+[Markdown](http://daringfireball.net/projects/markdown/dingus) is a [lightweight markup language](http://blog.codinghorror.com/is-html-a-humane-markup-language/) for writing formatted, semantic content. Because it's so lightweight, it's also very easy to use.
 
 It fell to me recently to edit a series of large documents that were stored in a [Git](http://git-scm.com/) repository. Using Git for storing text documents can seem daunting at first given the extra steps involved in [staging](https://www.kernel.org/pub/software/scm/git/docs/git-add.html), [committing](https://www.kernel.org/pub/software/scm/git/docs/git-commit.html) and [pushing](http://git-scm.com/docs/git-push) your changes. Yet armed with knowledge of just some of Git's many commandline switches, it becomes really easy.
 
