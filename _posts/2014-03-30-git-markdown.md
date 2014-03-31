@@ -72,3 +72,5 @@ Type `y` to stage the current hunk show above, `n` to leave it unstaged and `q` 
 Note that the `-v` commandline switch stands for 'verbose'; when specified with the 'commit' command, Git will show you a *diff* of the changes you have made beneath your commit message.
 
 Git will keep asking you which hunks you would like to stage until you've either pressed `q`, or, accepted or rejected all of the changes since your last commit.
+
+You'll then need to enter your commit message as normal and you're done.
