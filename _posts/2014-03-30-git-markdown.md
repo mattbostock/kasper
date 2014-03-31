@@ -13,7 +13,7 @@ It fell to me recently to edit a series of large documents that were stored in a
 
 I use [vim](http://www.vim.org/) for editing source code, and it's fairly well suited for editing Markdown. However, I also find it useful to see a visual preview to help me spot any formatting mistakes.
 
-On Mac OS X, @ssharpe introduced me to [Mou](http://mouapp.com/), which currently in beta and does the job nicely. I also use Windows, for which [Haroo Pad](http://pad.haroopress.com/) appears to be a promising alternative (and is also cross-platform).
+On Mac OS X, @samjsharpe introduced me to [Mou](http://mouapp.com/), which currently in beta and does the job nicely. I also use Windows, for which [Haroo Pad](http://pad.haroopress.com/) appears to be a promising alternative (and is also cross-platform).
 
 ### Commit your changes with patch mode
 
