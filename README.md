@@ -1,38 +1,139 @@
-# Kasper
+# Pixyll
 
-This is a port of Ghost's default theme [Casper](https://github.com/tryghost/casper) for Jekyll. 
-Feel free to fork, change, modify and re-use it.
+[pixyll.com](http://www.pixyll.com)
 
-## How to use it
+![Pixyll screenshot](https://cloud.githubusercontent.com/assets/1424573/3847467/134aa236-1e66-11e4-8421-4e8c122118dc.png)
 
-Simply clone this repository, and then run `jekyll -w serve` inside the directory.
+Pixyll is a simple, beautiful theme for Jekyll that emphasizes content rather than aesthetic fluff. It's mobile _first_, fluidly responsive, and delightfully lightweight.
 
-Kasper theme includes:
+It's pretty minimal, but leverages large type and drastic contrast to make a statement, on all devices.
 
-* Pagination
-* Rss
-* Google Analytics Tracking code
-* Code Syntax Highlight
-* Author's profile with picture
-* Disqus comments
+This Jekyll theme was crafted with <3 by [John Otander](http://johnotander.com)
+([@4lpine](https://twitter.com/4lpine)).
 
-## Screenshots
+## Getting Started
 
-![index page](https://raw.github.com/rosario/kasper/master/assets/images/kasper-theme-index.png)
-![post page](https://raw.github.com/rosario/kasper/master/assets/images/kasper-theme-post.png)
+If you're completely new to Jekyll, I recommend checking out the documentation at <http://jekyllrb.com> or there's a tutorial by [Smashing Magazine](http://www.smashingmagazine.com/2014/08/01/build-blog-jekyll-github-pages/).
 
+### Installing Jekyll
 
-## Thanks 
-Most of the work as been already done by the Ghost team, I've just ported Casper to Jekyll. 
-I've also added few things for specifid to Jekyll and some minor style changes.
+If you don't have Jekyll already installed, you will need to go ahead and do that.
 
-## Copyright & License
+```
+$ gem install jekyll
+```
 
-Copyright (C) 2013 Ghost Foundation - Released under the MIT License.
+### Fork, then clone
 
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+Fork the repo, and then clone it so you've got the code locally.
 
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+### Modify the _config.yml
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+The `_config.yml` located in the root of the Pixyll directory contains all of the configuration details
+for the Jekyll site. The defaults are:
+
+```yml
+# Site settings
+title: Pixyll
+email: your_email@example.com
+author: John Otander
+description: "A simple, beautiful theme for Jekyll that emphasizes content rather than aesthetic fluff."
+baseurl: ""
+url: "http://pixyll.com"
+
+# Build settings
+markdown: kramdown
+permalink: pretty
+paginate: 3
+```
+
+### Jekyll Serve
+
+Then, start the Jekyll Server. I always like to give the `--watch` option so it updates the generated HTML when I make changes.
+
+```
+$ jekyll serve --watch
+```
+
+Now you can navigate to `localhost:4000` in your browser to see the site.
+
+### Using Github Pages
+
+You can host your Jekyll site for free with Github Pages. [Click here](https://pages.github.com/) for more information.
+
+#### A configuration tweak if you're using a gh-pages sub-folder
+
+In addition to your github-username.github.io repo that maps to the root url, you can serve up sites by using a gh-pages branch for other repos so they're available at github-username.github.io/repo-name.
+
+This will require you to modify the `_config.yml` like so:
+
+```yml
+# Site settings
+title: Repo Name
+email: your_email@example.com
+author: John Otander
+description: "Repo description"
+baseurl: "/repo-name"
+url: "http://github-username.github.io"
+
+# Build settings
+markdown: kramdown
+permalink: pretty
+paginate: 3
+```
+
+This will ensure that the the correct relative path is constructed for your assets and posts. Also, in order to run the project locally, you will need to specify the blank string for the baseurl: `$ jekyll serve --baseurl ''`.
+
+##### If you don't want the header to link back to the root url
+
+You will also need to tweak the header include `/{{ site.baseurl }}`:
+
+```html
+<header class="site-header px2 px-responsive">
+  <div class="mt2 wrap">
+    <div class="measure">
+      <a href="{{ site.url }}/{{ site.baseurl }}">{{ site.title }}</a>
+      <nav class="site-nav right">
+        {% include navigation.html %}
+      </nav>
+    </div>
+  </div>
+</header>
+```
+
+A relevant Jekyll Github Issue: <https://github.com/jekyll/jekyll/issues/332>
+
+### Contact Form
+
+If you'd like to keep the contact form, which uses <http://forms.brace.io/>, you will need to update the email address.
+
+Currently, the `contact.md` has the following:
+
+```html
+<form action="https://forms.brace.io/johnotander@icloud.com" method="POST" class="form-stacked form-light">
+```
+
+Where it says `johnotander@icloud.com`, you will need to change that to the email that you wish to have the form data sent to. It will require you to fill the form out when you push it live for the first time so that you can confirm your email.
+
+### Put in a Pixyll Plug
+
+If you want to give credit to the Pixyll theme with a link to <http://pixyll.com> or my personal website <http://johnotander.com> somewhere, that'd be awesome. No worries if you don't.
+
+### Enjoy
+
+I hope you enjoy using Pixyll. If you encounter any issues, please feel free to let me know by creating an [issue](https://github.com/johnotander/pixyll/issues). I'd love to help.
+
+## Contributing
+
+1. Fork it
+2. Create your feature branch (`git checkout -b my-new-feature`)
+3. Commit your changes (`git commit -am 'Add some feature'`)
+4. Push to the branch (`git push origin my-new-feature`)
+5. Create new Pull Request
+
+## Thanks to the following:
+
+* [BASSCSS](http://basscss.com)
+* [Jekyll](http://jekyllrb.com)
+* [Refills](http://refills.bourbon.io/)
+* [Solarized](http://ethanschoonover.com/solarized)
