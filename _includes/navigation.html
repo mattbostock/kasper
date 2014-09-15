@@ -1,2 +1,5 @@
-<a href="{{ site.baseurl }}/about/">About</a>
-<a href="{{ site.baseurl }}/contact/">Contact</a>
+{% for page in site.pages %}
+{% if page.url != "/" %}
+<a class="page-link" href="{{ page.url | prepend: site.baseurl }}">{{ page.title }}</a>
+{% endif %}
+{% endfor %}
