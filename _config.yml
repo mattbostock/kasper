@@ -3,7 +3,7 @@ description: Thoughts from a web ops engineer
 meta_description: "Tech notes from a web operations engineer"
 
 markdown: redcarpet
-pygments: true
+highlighter: pygments
 paginate: 3
 tz: Europe/London
 permalink: /:year/:month/:day/:title/
