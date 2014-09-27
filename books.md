@@ -8,6 +8,8 @@ Below is a list of books I have read recently and would recommend, and those I'm
 
 ## Currently reading
 
+[BGP: Building Reliable Networks with the Border Gateway Protocol](http://www.amazon.co.uk/dp/0596002548)
+
 [HTTP 1.1 RFCs 7230-35](http://tools.ietf.org/ebook/)
 
 ## Read recently
