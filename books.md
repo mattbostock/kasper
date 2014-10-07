@@ -4,7 +4,7 @@ title: Books
 permalink: /books/
 ---
 
-Below is a list of books I have read recently and would recommend, and those I'm currently reading.
+Below is a list of books I have read recently and those I'm currently reading.
 
 ## Currently reading
 
