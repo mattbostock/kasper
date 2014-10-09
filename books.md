@@ -27,3 +27,5 @@ Below is a list of books I have read recently and those I'm currently reading.
 [Clean Code: A Handbook of Agile Software Craftsmanship](http://www.amazon.co.uk/gp/product/B001GSTOAM)
 
 [An Introduction to Programming in Go](http://www.amazon.co.uk/gp/product/B0095MCNAO)
+
+[Network Ninja](http://www.amazon.co.uk/dp/1435745094/)
