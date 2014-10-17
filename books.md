@@ -8,13 +8,13 @@ Below is a list of books I have read recently and those I'm currently reading.
 
 ## Currently reading
 
-[PostgreSQL: Up and Running](http://www.amazon.co.uk/dp/B008IGIKY6/)
-
-[BGP: Building Reliable Networks with the Border Gateway Protocol](http://www.amazon.co.uk/dp/0596002548)
-
 [HTTP 1.1 RFCs 7230-35](http://tools.ietf.org/ebook/)
 
 ## Read recently
+
+[PostgreSQL: Up and Running](http://www.amazon.co.uk/dp/B008IGIKY6/)
+
+[BGP: Building Reliable Networks with the Border Gateway Protocol](http://www.amazon.co.uk/dp/0596002548)
 
 [Where Wizards Stay Up Late: The Origins of the Internet](http://www.amazon.co.uk/dp/0684832674)
 
