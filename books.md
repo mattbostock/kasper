@@ -8,6 +8,8 @@ Below is a list of books I have read recently and those I'm currently reading.
 
 ## Currently reading
 
+[The Art of UNIX Programming](http://www.amazon.co.uk/dp/B003U2T5BA/)
+
 [HTTP 1.1 RFCs 7230-35](http://tools.ietf.org/ebook/)
 
 ## Read recently
