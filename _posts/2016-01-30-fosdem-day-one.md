@@ -1,0 +1,519 @@
+---
+layout: post
+title:  "FOSDEM 2016, Brussels - Day One"
+date:   2016-01-30 10:00:00
+categories: talks
+---
+
+## Lennart Poettering (Red Hat) - 'systemd and Where We Want to Take the Basic Linux Userspace in 2016'
+
+- Systemd in 2015: switched to GitHub, easiest place to receive contributions and no need to maintain own infrastructure; consequent increase in contributions; added continuous integration
+- Systemd in 2016
+- All major distributions have adopted systemd as default (except Gentoo and Slackware)
+- Shipped in RHEL7
+- Is the controversy over?
+- networkd is now default in Fedora's and Ubuntu's cloud edition
+- nspawn a success (chroot on steroids; a minimal container manager); used as base for CoreOS' rkt
+- small DHCP library sd-dhcp now used by NetworkManager
+- Unified Control Group Hierarchy: instead of having separate organisation trees to manage resources (e.g. CPU, I/O), just use one
+  - will be enabled soon in some distributions
+  - doesn't work with Docker currently; will break many systems but an improvement
+  - includes support for pids controller (put limits on number of processes per application (e.g. prevent nginx from forking more than x processes))
+  - safe delegation
+  - API break in /sys/fs/cgroup (controller no longer specified)
+- systemd-resolved: recent addition
+  - DNS resolution
+  - local caching DNS and LLMNR resolver
+  - supports DNNSEC, mDNS/DNS-SD
+    - DNSSEC = authenticated DNS (integrity only, not confidentiality)
+    - chain of trust: root zone authenticates TLD zones
+      - TLD zones authenticate the zones below them
+      - and so on
+    - allows embedded SSH, TLS, PGP fingerprints and certificates in DNS
+    - root zone was signed in 2010
+    - most US government web sites using DNSSEC
+    - adoption rate: https://eggert.org/meter/dnssec
+    - Google's public recursive DNS server validates DNSSEC (though your connection to Google's DNS server is not authenticated)
+    - "nobody really needs it"; doesn't enable anything that wasn't possible before
+      - TLS already allows for authentication once connected to server
+    - compare with IPv6: strong reasons but still not widely adopted
+    - should we support it anyway? speaker thinks so; if the data is there, we should use it
+    - problems:
+      - DNSSEC validation for end-user almost non-existent
+        - no OS implements it currently
+        - makes things slower, browser vendors not enthusiastic
+          - extra requests needed
+      - difficult to set up server-side
+      - specs not very good
+      - establish trust through centralised IANA-run delegation?
+      - private DNS zones difficult, e.g. fritz.box
+      - crappy DNS servers in end-users routers and at ISPs implement DNSSEC badly
+      - captive portals
+      - systemd-resolved's approach: downgrade aggressively, unless configured otherwise
+        - downgrading leaves us open to downgrade vulnerability
+      - however:
+        - still an elaborate checksum scheme
+        - whether data is authenticated or not, it's still available to applications, e.g.:
+          - PGP, TLS, SSH fingerprints and certificates from the DNS
+
+## Jean-Pierre Rosen (Adalog) - 'Introduction to Ada for Beginning[sic] and Experienced Programmers'
+
+- Programming a human activity
+- Humans make mistakes
+- Mistakes can be costly
+- Ada tries to find errors as soon as possible
+- Ada User Journal published four times a year
+- Brief history:
+  - Named after Ada Byron (not an acronym!), countess of Lovelace (1815-1852)
+  - 1983: the basis
+    - first industrial language with exceptions, generics, tasking
+    - very rich for its time
+  - 1995: major revision: OOP, protected objects, hierarchal libraries
+    - hierarchy makes it easy to track who is using which component
+    - first standardised OO language
+  - 2005: minor revision: interfaces, improved existing features
+  - 2012: programming by contracts, higher level expressions
+    - more formal
+  - a free language and an international standard
+    - ISO 8652:2012, freely available
+    - entirely controlled by its users, not owned by any company
+  - free (and proprietary) compilers
+  - many free resources
+    - adapower.com, adaworld.com
+  - a dynamic community
+    - Ada Europe
+    - newsgroups: comp.lang.ada, fr.comp.lang.ada
+- who uses Ada?
+  - transport: Airbus A380, subway in Paris and New York; Rosetta; superyachts
+  - medical devices
+- why use Ada?
+  - when failure is not an option
+  - safety-critical systems
+  - buffer overflows still most common origin of security breaches (impossible in Ada, since 1983)
+  - arithmetic overflow, illegal pointers, memory leaks
+  - Ada checks a lot at compile time
+    - bad design doesn't compile
+    - find bugs as early as possible
+  - what's important in a language is what it forbids
+- what's in Ada
+  - classical procedural language (not functional or deductive)
+  - based on Pascal
+  - readability a main concern
+  - very strong typing system
+  - packages
+  - exceptions
+  - generics
+  - tasking (concurrency)
+  - low-level programming
+  - object-oriented
+  - focus on methodology
+- building-block approach (flexibility)
+  - PlayMobil vs Lego
+  - Ada takes Lego approach
+- syntax
+  - blocks repeat opening keyword when closing (e.g. `loop...end loop`)
+  - trailing semicolons
+  - can't modify loop iterators (`for c in Colour loop`: `c` is a constant)
+  - can name loops to avoid ambiguity when using nested loops
+  - names checked by the compiler (unlike a comment)
+  - `in` operator to compare against a range
+  - compiler checks that all cases are covered when using case statements
+  - easy to manipulate deeply-nested or complex data structures
+- strong typing system
+  - set boundaries on types, e.g. `type Day_Of_Week is range 0..6;`
+  - domain-specific typing (Ada compiler maps the domain to the machine-level types)
+- packages
+  - collect code related to same entity
+  - private section to package
+  - record type similar to a struct
+  - specification required (similar to `*.h` file in C)
+  - to use a package, use `with` keyword: all relations are explicit in Ada
+  - dependencies are explicit: no Makefiles
+- discriminated types
+  - flexible data structures
+- object orientated programming
+  - no `class` construct
+  - packages support encapsulation
+  - tagged types support dynamic binding
+  - a class in Ada = encapsulation + dynamic binding
+    - design pattern: a tagged type in a package
+  - no relation to pointers
+  - Ada differentiates specific type from class-wide type
+    - allows a stricter approach to OO
+    - tie methods to a given type
+- interfaces (Ada 2005+)
+- exceptions
+  - every run-time error results in an exception
+  - every exception can be handled
+- generics
+  - provide algorithms that work on any data type with a required set of properties
+- tasking
+  - integral part of the language
+  - tasks (threads) are high level objects
+  - high leve communication and synchronisation
+  - rendezvous (client/server model)
+  - protected objects
+  - tasking is easy to use
+    - don't hesitate to put tasks in your programs
+- access to the low-level
+  - you describe the high-level view
+  - you describe the low-level view
+  - you work at the high-level and get what you want at the low-level
+- for the really low-level...
+  - can specify memory address
+  - machine code insertion
+  - can handle interrupts
+  - everything can be done in Ada, provided it is stated clearly and explicitly
+- special-need annexes
+  - real-time annex
+  - distributed systems
+  - safety and security annex
+  - etc.
+- really portable
+  - all compilers implement exactly the same language
+  - high level constructs to allow this
+- easy to write
+  - GNATs error messages very good
+  - language protects you from many mistakes
+    - strong typing
+    - if it compiles... it generally works
+- conclusion: try Ada
+
+## Fabien Chouteau (AdaCore) and Raphael Amiard (AdaCore) - 'Make with Ada'
+
+- Talk based on blog series
+- A series of posts about DIY/maker/hacker projects
+- Using Ada/SPARK
+- The projects should be:
+  - visually attractive
+  - interesting outside the Ada community
+- Rhythmbox
+  - music production software usually has complex UIs
+  - simple UIs are complex/hard to write
+  - let's write music using C by writing to `/dev/audio` (using iterative mathematical sequence)
+  - now in Ada
+  - ada-synth-lib
+    - high level sythesis toolkit
+    - primitives to:
+      - create instruments
+      - create repeating musical sound sequences
+    - Ada suitable for this because:
+      - readability
+        - named parameters
+        - aggregates and array literals
+        - enumerations
+      - static and strong typing of numeric types
+      - can prove parts of your application with SPARK
+        - e.g. used for parts of the oscillator code
+  - rhythmbox is a graphical frontend for ada-synth-lib
+    - allows you to change patch set parameters live
+    - allows you to program simple rhythmic sequences
+    - cross-platform
+    - aims to be usable on small touchscreen devices
+    - simple abstraction layer over:
+      - NanoVG
+      - OpenGL
+      - X11 (for mouse events)
+    - other components used
+      - ada-soundio: Ada bindings for libsoundio
+      - ada-nanovg: Ada bindings for vector graphics library nanovg
+      - OpenGLAda by flyx
+  - Source code: https://github.com/raph-amiard/rhythmbox
+- Solenoid engine
+  - solenoid = coil of wire
+  - pushes a piston, similar to combustion engine
+  - Ravenscar run-time (subset of Ada for embedded applications) on an STM32F4
+    (ARM Cortex-M4F)
+  - no operating system
+  - interrupt driven
+  - `Ada.Real_Time.Timing_Events`
+  - https://github.com/Fabien-Chouteau/solenoid-engine-controller
+- 2D Apollo lunar lander simulator
+  - gtkada for interface
+  - simulates gravity, main engine, instruments
+  - https://github.com/Fabien-Chouteau/eagle-lander
+  - GNAT dimensionality analysis
+    - e.g. measure m/s
+    - checks dimensions match (e.g. m + s = m/s)
+    - found an error thanks to this
+- Smartwatch app using Ada and SPARK
+  - Pebble Time (using STM32F4 (ARM Cortex-M4))
+  - C API
+  - Ada binding to C API
+    - https://github.com/Fabien-Chouteau/Ada_Time
+  - port of Tetris demo
+  - written in SPARK2014
+    - a subset of Ada
+    - additional checks, e.g. for runtime errors
+    - check functional properties of your program using contracts
+    - provides mathematical proof of functions
+    - Building High Integrity Applications with SPARK (McCormick, Chapin)
+    - [AdaCore University](http://university.adacore.com/courses/spark-2014)
+- AdaCore on GitHub
+  - Drivers for ARM Cortex-M4 MCUs (bareboard)
+  - gsh (a POSIX shell for Windows in Ada)
+  - gtkada
+  - langkit: Language creation framework
+
+## Krzysztof Opasiak (Samsung R&D) - 'Make your own USB device without pain and money'
+
+- What's USB about?
+  - providing services
+  - e.g. storage, printing, Ethernet, camera, etc
+  - USB host <-> USB device
+  - USB host is used by end-user
+  - a device can only be connected to one host
+  - multiple devices can connect to one host
+- What's a USB device?
+  - piece of hardware
+  - USB protocol implementation
+  - piece of hardware/software for providing desired functionality
+- Host connects to an endpoint (a bit like a TCP/IP port)
+  - device may have up to 31 endpoints (including ep0)
+  - each endpoint has a unique address
+  - only endpoint 0 may transfer data in both directions
+  - all other endpoints may transfer data in one direction
+    - USB is host-centric
+      - IN: transfer data from device to host
+      - OUT: transfer data from host to device
+  - endpoint types
+    - control
+      - during discovery of device
+      - bi-directional endpoint
+      - used for enumeration
+    - interrupt
+      - transfers a small amount of low-latency data
+      - uses data on the bus
+    - bulk
+      - used for large data transfers
+      - large, time-insensitive data
+    - isochronous
+      - transfers large amount of time-sensitive data, e.g. video
+  - an interface is a group of endpoints to implement sandboxed functionality
+    - e.g. endpoint IN, endpoint OUT
+  - interfaces grouped into configurations
+  - devices may have multiple configurations
+  - only one configuration can be used at the same time
+- USB bus
+  - host-controlled bus
+  - host must initiate all activity
+  - device can't initiate any communication
+  - USB is a polled bus; host constantly polls device
+- USB transfer vs transaction
+  - transation
+    - delivery of data to an endpoint
+    - limited by wMaxPacketSize
+  - transfer
+    - one or more transactions
+    - may be large or small
+    - completion conditions
+- USB transport
+  - `IN` (host reads data from the device)
+    - host sends an `IN` token
+    - then device sends data and host sends ACK
+    - or, device sends NAK, host will retry until timeout
+  - `OUT`
+    - host sends `OUT` token
+    - host sends the data (one packet)
+      - if device accepts data, device sends ACK
+      - or, device sends NAK and host retries until timeout
+      - PING, NYET to save bandwidth
+- Plug and Play
+  - enumeration = process of finding device's abilities
+  1. Plug in device
+  2. Detect connection
+  3. Set address
+  4. Get device info
+  5. Choose configuration (which group of interfaces)
+  6. Choose drivers for interfaces
+  7. Use device
+- In Linux, USB drivers are usually the drivers for the interfaces (rather than the device as a whole)
+- Device details
+  - each entity (interface, configuration, etc) is described using a USB descriptor
+    - each descriptor has a header
+      - USB device descriptor
+        - idVendor (vendor ID from USB standards body; identifies manufacturer)
+        - idProduct
+        - idDeviceClass (used for well-known protocols or 'class' of device)
+          - e.g. USB thumb drivers belong to mass storage class so a generic driver can be used
+        - Human-readable strings
+          - idManufacturer
+          - idProduct
+          - idSerial
+      - USB configuration descriptor
+        - MaxPower
+      - USB endpoint descriptor
+      - USB interface descriptor
+- What's a USB driver?
+  - piece of kernel code, or a user-space libusb app
+  - usually provides some functionality for userspace (network interface, block device, tty, etc)
+  - implementation of some communication protocol
+    - a bit like a web browser of SSH client
+- How to choose a suitable driver?
+  - struct usb_device_driver
+  - struct usb_driver = driver for the interface, most commonly used
+  - when device needs special handling
+    - Use VID and PID and interface ID
+  - when implementing a standardised protocol
+    - use bInterfaceClass, bInterfaceSubClass etc
+  - driver will not match if interface doesn't match a suitable class
+- How to compose a new USB device?
+  - need suitable hardware
+    - get a board with a UDC controller (BBB, Odroid, OrangePi, etc)
+      - UDC = USB Device Controller
+  - implementation of USB protocol
+    - use Linux kernel
+  - implementation of a useful protocol
+    - borrow one from Linux
+  - desired functionality
+- Terminology under Linux
+  - USB device = USB gadget + UDC
+  - UDC driver = driver for USB Device Controller
+  - USB function (type) driver which implements some useful protocol (HID, Mass Storage)
+  - USB gadget = glue layer for functions
+    - handles enumeration
+    - handles most requests
+- Need to configure kernel
+  - USB support
+    - USB gadget driver
+      - Configure through configfs
+- Available functions
+  - Ethernet
+  - Serial
+  - Mass Storage
+  - HID
+  - UVC
+  - UAC
+  - Printer
+  - Phonet
+  - Loopback and SourceSink
+- Base composition
+  - define the identify of the gadget
+    - vendor/product ID
+  - what functions
+  - how many configurations
+  - How to do this?
+    - use bare kernel ConfigFS interface (arduous, see Linux kernel docs)
+    - use libusbgx to create a program
+    - use gt to create a simple script
+    - use gt to load gadget scheme
+  - What are gadget schems like?
+    - declarative gadget description
+    - simple config file
+    - libconfig syntax
+    - interpreted by libusbgx
+    - loaded by `gt load`
+- Demo!
+- How to create a new function?
+  - Option 1: Write a kernel function
+  - Option 2: Use FunctionFS service
+    - a standard USB function
+    - a filesystem
+      - which forwards all USB traffic to userspace
+  - Basic concepts
+    - single file when mounting FunctionFS
+      - epo0 for communication, events, and descriptors
+    - `read()` to schedule USB `OUT` request
+    - `write()` to schedule USB `IN` request
+    - remember, device cannot initiate any communication
+  - create function instance (ConfigFS)
+  - mount filesystem (pass instance name as dev)
+  - open ep0 file
+  - write function descriptors
+  - write function strings
+  - open epXX (if any)
+  - read events from ep0
+    - `BIND`
+    - `UNBIND`
+    - `ENABLE`: called when host is ready for device to start functioning
+    - `DISABLE`
+    - `SETUP`
+  - `read()`/`write()` to other endpoints
+
+## Tycho Anderson (Canonical) - 'p.haul + LXD'
+
+- What is p.haul?
+  - live migration of containers
+  - iterative versus stop-the-world
+  - lots of big pages problem
+- videos shown previously were smoke and mirrors (stopped the world)
+  - checkpoint whole container (dump memory state to disk and send over the wire)
+  - reality: it's not very practical
+- no standard way for iterative migration yet
+- p.haul does negotiation of iterative transfer (send over deltas of dirty pages)
+- no release yet
+- almost there
+- liblxc support
+  - p.haul needs to call container engine for final migrate
+    - container engine has a lot of knowledge of container so needs to know
+  - new `->migrate` call in liblxc 2.0 takes path to pre-dump images to CRIU
+    - CRIU understands what kernel resources a userspace application is using them
+      so that it can copy those resources to the new host
+- Practical problems - p.haul from LXD
+  - liblxc only has python3 supported bindings
+  - p.haul uses python-protobuf, which only has a python2 release currently
+  - execution chain: lxd => p.haul => lxd => libxc->migrate => criu
+- a container with CPU extension optimisations could blow up if migrated to a
+  CPU not supporting those optimisations
+- migrating from a newer kernel to an older kernel also liable to break (ABI
+  changes)
+
+## Alexander Burluka (Virtuozzo) - 'Libct and application containers'
+
+- History
+  - 2002: Virtuozzo
+  - 2005: OpenVZ
+  - Linux-VServer
+  - 2006: Namespaces and cgroups
+  - 2008: LXC (Linux containers)
+  - 2010: Application containers (Docker)
+    - systemd-nspawn
+    - Docker
+      - LXC as engine
+      - later, used libcontainer as engine
+    - Rocket (open standard)
+      - systemd-nspawn
+- Namespaces
+  - 2002: mount (oldest namespace; mount points)
+  - network
+  - pid (processes)
+  - IPC
+  - UTS (hostname and NIS domain name)
+  - 2013: user (security-related identifiers and attributes)
+    - very important for application containers
+- Control groups
+  - limit resources
+    - cpu, cpuset, cpuacct
+    - memory, hugetlb
+    - blkio
+    - devices
+    - net_cls, net_prio
+    - freezer
+    - perf_event
+- libct library
+  - allows running containerised applications
+    - configure namespaces and cgroups
+    - unprivileged containers
+  - in C, with bindings for other languages
+  - cross-platform
+- reasons for creating libct
+  - complexity of low-level API
+  - support for all kinds of containers
+  - Liunux containers
+  - OpenVZ
+  - Solaris zones
+  - FreeBSD jails
+- libcontainer and libct
+  - in Go / in C
+  - both support backends
+  - only Go / binding for other languages
+  - easy for developing / works faster
+  - no `fork()` / can fork
+  
+At this point, my laptop ran out of battery.
+
+Other talks attended:
+
+[Container mechanics in rkt and Linux](https://fosdem.org/2016/schedule/event/rkt/)
+[Powering Twitter's infrastructure with containers](https://fosdem.org/2016/schedule/event/twitter/)
+[Capsicum: Capability-based sandboxing](https://fosdem.org/2016/schedule/event/capsicum/)
