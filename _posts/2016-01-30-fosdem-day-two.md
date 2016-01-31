@@ -5,4 +5,238 @@ date:   2016-01-31 09:00:00
 categories: talks
 ---
 
-## Anand Babu Periasamy - 'Minio - Amazon S3 alternative in Go'
+## Anand Babu 'AB' Periasamy - 'Minio - Amazon S3 alternative in Go'
+
+- Worked previously on GlusterFS
+- Minio written in Go, open source
+- Apache v2 license
+- Object storage
+- Amazon S3 compatible API
+- when building command-line tools, think of the user and keep the interface simple
+  - use colour in the terminal
+  - use human-readable numbers (e.g. 10MB versus 1024000 bytes)
+- `minio server ~/share-this-directory` to start server
+- Why Go?
+  - prototype was in C++ and Google V8; Mozilla SpiderMonkey
+  - Rust came too late for this project; Go community was great
+    - Rust's strengths weren't important for the design of Minio
+  - Haskell has small community
+  - C and Python
+  - C and Guile
+  - Java: didn't want JVM dependency and startup time
+  - goroutines and message passing (channels)
+- Minio project goals
+  - minimalist design
+  - community
+  - easy
+- Experimenting with Go tooling for Minio
+  - first added support for YASM to Go tool (patch, not adopted upstream); approach abandoned
+    - Go tool rewritten in Go from C
+- Go error handling
+  - Minio probe package (replaces Go's standard error interface)
+  - debug
+  - Logrus logging library
+- Web interface in Go and React
+
+## Jonathan Boulle (CoreOS) - 'etcd: the cornerstone of distributed systems using Go'
+
+- etcd is a distributed key-value store
+  - like `/etc` but distributed
+  - clustered
+- Building block for higher order systems
+  - primitives for building reliable distributed systems
+- Started as an intern project
+- 2013: alpha; v0.1-v0.4
+- 2015: stable release, v2.0+
+  - new Raft implementation
+  - stable v2 API
+- 2016: v3.0
+  - highly scalable backend
+  - efficient, powerful API
+- Production ready
+  - used widely
+  - long running failure-injection tests
+  - no known data loss issues
+  - no known inconsistency issues
+  - used in critical CoreOS systems like locksmith and fleet
+- Why build etcd?
+  - CoreOS: 'secure the Internet'
+  - updating servers = reboot servers
+  - move towards new application container paradigm
+  - need a:
+    - shared configuration store (for service discovery etc)
+    - distributed lock manager (to co-ordinate reboots)
+- Why use etcd?
+  - highly available
+  - highly reliable
+  - strong consistency guarantees
+  - simple, fast HTTP API
+  - open source
+  - use only for most critical data; not designed for storage of lots of data
+    - e.g. store file metadata but not file contents in etcd
+- How does etcd work?
+  - replicated log to model a state machine
+  - Raft consensus algorithm: "In search of an understandable consensus algorithm" (Ongaro, 2014)
+    - three key concepts
+      - leaders
+      - elections
+      - terms
+  - written in go
+  - `etcd` server binary
+  - `etcdctl` client binary
+- typical cluster has 3 or 5 machines
+  - ensure a quorum
+- simple HTTP API (v2)
+  - `GET /v2/keys/foo`
+  - `GET /v2/keys/foo?wait=true` for HTTP long-polling
+- compare-and-swap
+  - atomic
+  - change value if current value is equal to a known value
+  - useful primitive for distributed locks
+- etcd client package
+- etcd apps
+  - locksmith (machine reboots)
+    - 'semaphore for reboots'
+  - CoreOS updates happen automatically
+    - stop all the machines starting at once
+  - skydns
+    - service discovery and DNS server
+    - backed by etcd for all configuration/records
+  - vulcand
+    - "programmatic, extendable proxy for microservers"
+    - HTTP load balancer
+    - etcd for all configuration
+  - confd
+    - simple configuration templating
+    - watch etcd for changes and render templates with new values, reload
+      applications
+  - Kubernetes
+- Recent improvements (v2)
+  - asynchronous snapshotting (used to be synchronous, stop-the-world problem)
+    - log-based system
+    - snapshot before purging log
+  - raft pipelining
+    - etcd previously used synchronous RPCs
+- Future improvements (v3)
+  - scale to thousands of nodes (currently hundreds)
+  - efficient and powerful API
+    - flat binary key space instead of current directory hierarchy
+    - multi-object transaction (multiple keys at once)
+    - native leasing API
+    - native locking API
+    - gRPC (HTTP2 and protobuf)
+  - range operation for multiple keys at once
+    - prefix
+    - range
+  - delete a range of keys
+  - mini transaction
+    - compare and swap
+    - multiple object transaction
+      - check against multiple values at once
+  - watch
+    - support multiple keys and prefixes per stream
+      - `watchKey(foo)`
+      - `watchPrefix(coreos)`
+    - support watch from historical point
+  - gRPC
+    - efficient
+    - multiplexed; multiple streams share one TCP connection
+    - protobuf, encapsulated in HTTP/2 binary protocol
+    - rich generated libraries in many languages
+  - incremental snapshot
+    - only save the delta instead of full data set
+    - less I/O and CPU cost per snapshot
+  - disk backend
+    - keep the cold historical data on disk
+    - keep the hot data in memory
+    - support 'entire history' watches
+    - user-facing compaction API
+    - disk space bounds how much history is kept
+    - etcd becomes an MVCC (multi-version)
+  - recipes for common functionality exposed as new packages
+    - native lease
+      - `l := lease.Create(10*time.Second)`
+    - watch primitive
+      - `watcher.Watch("foo")`
+    - expose leader election
+    - locking package
+    - barrier package
+- etcd and Go
+  - easy to iterate
+  - fast
+  - robust standard libraries
+  - healthy, active ecosystem
+  - simple but powerful concurrency
+  - the less good:
+    - unpredicable GC (latency spikes): github.com/etcd/issues/4111
+    - scheduler starvation
+
+## Luis Pabón (Red Hat Storage) - 'From prototype to deployment: Building a REST application using Go'
+
+- experiences learned during the development of Heketi
+- Heketi = a service to manage the lifecycle of GlusterFS volumes across multiple clusters
+- https://github.com/heketi/heketi
+- Requirements:
+  - HTTP REST service with authentication
+  - manage multiple nodes concurrently
+  - maintain information on the clusters
+  - simple deployment
+  - allow concurrent requests
+  - non-blocking
+- Design
+  - middleware for authentication
+  - endpoints, DB models
+  - BoltDB
+  - SSH executor
+  - simple ring allocator
+- Other technologies considered
+  - Python
+    - CherryPy, Bottlepy, Django
+    - hard to install (need Python runtime and libraries)
+    - concurrency more difficult
+  - Ruby
+    - Rails, Sinatra, RESTRack
+  - Java
+    - RESTx, Jersey
+    - JVM dependency
+- Why Go?
+  - easy JSON integration
+  - concurrency
+  - simple deployment
+  - simple HTTP package
+  - integrated testing package (part of stdlib)
+- HTTP/REST standards
+  - endpoint
+  - `GET`, `PUT`, `HEAD`, `POST`, `DELETE`
+  - response body contains data requested by client
+  - could be either XML or JSON format
+  - `HEAD`: metadata about content
+  - return status codes:
+    - `2xx` successful
+    - `3xx` redirection
+    - `4xx` client error
+    - `5xx` server error
+- HTTP routing
+  - really simple in Go (code sample)
+  - Firefox has built-in REST client GUI
+  - Gorilla routing library (gorillatoolkit.org)
+- JSON
+  - supported by the language
+  - easy to set up using struct tags
+  - remember to export your struct's fields
+  - JSON model using embedded types for easier changes to JSON
+- Logging
+  - Go provides simple log API
+  - create your own or use others like go-logging
+- Asynchronous HTTP
+  - avoid timeouts
+  - provide a more responsive service
+  - server provides a temporary resource to poll for completion
+  - 5-10 minutes completion time for some requests in Heketi
+  - no standard for this
+    - `HTTP 202` Accepted with location of URL to poll
+    - `GET` on URL to poll
+    - `HTTP 200` request still in progress (with `X-Pending` header)
+    - `HTTP 500` request terminated and has failed
+    - `HTTP 303` request completed successfully, use it on this URL
+    - `HTTP 204` Done: completed successfully, nothing to return
