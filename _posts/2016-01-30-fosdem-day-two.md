@@ -218,7 +218,6 @@ categories: talks
     - `5xx` server error
 - HTTP routing
   - really simple in Go (code sample)
-  - Firefox has built-in REST client GUI
   - Gorilla routing library (gorillatoolkit.org)
 - JSON
   - supported by the language
@@ -233,10 +232,192 @@ categories: talks
   - provide a more responsive service
   - server provides a temporary resource to poll for completion
   - 5-10 minutes completion time for some requests in Heketi
-  - no standard for this
+  - no standard for this; convention implemented was:
     - `HTTP 202` Accepted with location of URL to poll
     - `GET` on URL to poll
     - `HTTP 200` request still in progress (with `X-Pending` header)
     - `HTTP 500` request terminated and has failed
     - `HTTP 303` request completed successfully, use it on this URL
     - `HTTP 204` Done: completed successfully, nothing to return
+- Authentication
+  - JSON web tokens (JWT): https://jwt.io/
+
+## Derek Parker (CoreOS) - 'Debugging Go programs with Delve'
+
+- A response to lack of a Go debugger at the time
+- Go-specific debugger
+  - knowledge of runtime, scheduler, goroutines as a first class concept
+- Runs on Linux, Windows and OS X (Windows support very recent)
+  - about 90% parity between Windows and other platforms
+- Written mostly in Go
+  - can take advantage of standard library, i.e. parsing the AST
+  - cgo used for OS X/Windows support
+    - used to talk to low-level APIs not supported by stdlib
+  - simple to build (through difficult to install on OS X because of codesigning)
+    - uses a Makefile to build
+- Aims for simplicity of use
+  - like to go tool
+  - if you need a debugger, you're probably not in the best mood
+- Supported by IDEs:
+  - has JSON-RPC API
+  - can be invoked in headless mode
+  - already used by IntelliJ Go plugin, Microsoft VS Code, emacs, etc.
+- Future clients?
+  - web client
+  - more editor support
+- How does it work?
+  - parses DWARF info and symbol table from binary
+  - uses OS-specific syscalls for manipulating processes
+    - Linux: ptrace family of syscalls does most of the work
+    - OS X: mock syscalls; not documented at all
+      - digging into header files
+      - open source versions of new kernel
+      - also has ptrace syscall
+      - man page only has half the story
+    - Windows: debug API
+  - reads goroutine info from thread-local storage
+    - uses goroutine info to track across context switches
+      - stay locked to goroutine when stepping through program
+  - context switching could be:
+    - a blocking syscall
+    - a channel operation
+    - runtime.Gosched
+    - invoking a goroutine
+- Usage
+  - `dlv debug`
+    - compiles your program
+    - disables compiler optimisations
+    - invokes compiled binary, immediately attaches to it
+    - lands you at a prompt, ready to debug
+    - run it in the same place you'd run `go build`
+- Demo!
+  - `runtime.Breakpoint()` in code
+  - step through
+  - print variables
+  - step into function
+  - `restart`
+  - set certain variables types
+  - evaluate variables using expressions in Go syntax (`print i == 9`)
+  - `goroutines` to list goroutine
+- `dlv trace <regexp>`
+  - allows you to spy on your program (like strace/dtrace)
+  - will set tracepoint on any function that matches the regexp passed into it
+  - will display arguments to functions
+  - can optionally display stack trace leading up to function that triggered tracepoint
+  - can also trace running programs
+- `dlv attach <pid>`
+  - attach to a running process
+  - difficult on optimised binaries
+- The future
+  - still pre 1.0
+  - improved hardware support
+    - 32-bit Linux
+    - ARM
+    - FreeBSD
+    - anything that Go supports
+  - ability to call functions
+  - display disassembly of function (low hanging fruit)
+- Go compiler blockers
+  - go linker emits DWARF debugging info
+    - for historical reasons, instead of compiler
+    - info can be wrong or lack info, e.g. variable scope
+- Check the issue tracker: github.com/derekparker/delve/issues
+- Other plans
+  - split out various packages so code can be reused by other projects
+  - continue growing community support around project
+- Feedback welcome!
+
+## Kushal M (Red Hat) - 'Plugins and Go'
+
+- Works on GlusterFS (management daemon)
+  - where interest in Go plugins started
+- What's a plugin?
+  - a software component that adds or extends features to an existing computer
+    program without modifying the original program
+  - easily add new features
+  - allow third-part development
+  - flexibility for deployment
+- Implementing a plugin system
+  - define an interface
+    - (optionally) a plugin request interface
+  - define a location to drop plugins into
+  - load plugins and execute them
+- Runtime loading and execution of plugins
+  - requires support for dynamic loading
+- Two options currently in Go(?)
+  - standalone programs using IPC
+  - embedded scripting languages
+- Standalone
+  - possibly more secure
+  - host process can't be compromised directly
+  - plugin failures shouldn't affect host process
+  - performance a concern
+  - e.g. Packer (Hashicorp go-plugin package: https://github.com/hashicorp/go-plugin)
+  - https://github.com/natefinch/pie
+- Embedded scripts
+  - Plugins are scripts
+  - Embed a scripting language interpreter
+  - Use interpreter method to communicate
+  - Relatively more complex
+  - Lua, Javascript
+- Package plugin
+  - https://golang.org/s/execmodes
+  - runtime dynamic loading for Go
+  - Go-API and C-API -style API plugins
+
+## Francesc Campoy (Google) - 'The state of Go'
+
+- Where we are in January 2016
+- Time flies
+  - Go 1.6 release candidate 1 on January 28th
+  - Go 1.6 probably ready in February
+- Changes since Go 1.5
+  - no language changes
+  - changes to standard library
+    - net/http
+    - text/template, html/template
+    - sort
+    - more speed
+    - less bugs
+  - net/http now uses HTTP/2 by default
+- text/template
+  - new delimiters in template tags
+    - allows whitespace to be trimmed
+    - like ERB in Ruby
+  - new block action
+    - avoid repetition in templates
+    - executes in-place
+    - why do we need it?
+      - it's more compact
+- sort.Sort is faster; less interface calls
+  - could change order but order was never guaranteed (use `sort.Stable`)
+- time.Parse is now aware of leap years
+- Changes to runtime
+  - faster
+  - detection of concurrent map writes will now panic at runtime
+    - keep using the race detector so that it can trigger potential issues
+  - garbage collector
+    - now usually no more than ~10ms GC pauses even up to 250GB heap size
+- New ports
+- Changes to tooling
+  - cgo tool
+    - defined rules for pointers used by cgo
+    - checked by runtime at execution
+    - checks can be disabled, but you probably shouldn't
+  - `GO15VENDOREXPERIMENT` now enabled by default \o/
+    - flag will be removed in Go 1.7
+  - go doc will search vendored packages first
+    - defines priority of packages with import paths with less elements when searching by name
+  - go vet warns if the code prints a function instead of its result
+- Community
+  - code of conduct introduced on November 24th 2015
+  - Go meetups: http://go-meetups.appspot.com
+  - Women Who Go now has 7 chapters: http://www.womenwhogo.org
+- Many conferences coming up
+  - GopherGala (just finished)
+  - FOSDEM
+  - GopherCon Dubai
+  - GopherCon India
+  - GopherCon Denver
+  - dotGo
+- Go 1.6 release party on February 17th
