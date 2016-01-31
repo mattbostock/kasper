@@ -519,3 +519,5 @@ Other talks attended:
 [Powering Twitter's infrastructure with containers](https://fosdem.org/2016/schedule/event/twitter/)
 
 [Capsicum: Capability-based sandboxing](https://fosdem.org/2016/schedule/event/capsicum/)
+
+[Jetpack, a container runtime for FreeBSD](https://fosdem.org/2016/schedule/event/jetpack/)
