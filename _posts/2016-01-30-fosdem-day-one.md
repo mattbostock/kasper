@@ -515,5 +515,7 @@ At this point, my laptop ran out of battery.
 Other talks attended:
 
 [Container mechanics in rkt and Linux](https://fosdem.org/2016/schedule/event/rkt/)
+
 [Powering Twitter's infrastructure with containers](https://fosdem.org/2016/schedule/event/twitter/)
+
 [Capsicum: Capability-based sandboxing](https://fosdem.org/2016/schedule/event/capsicum/)
