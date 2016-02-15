@@ -2,8 +2,7 @@ title: Naming is hard
 description: Thoughts from a web ops engineer
 meta_description: "Tech notes from a web operations engineer"
 
-markdown: redcarpet
-highlighter: pygments
+markdown: kramdown
 paginate: 5
 tz: Europe/London
 permalink: /:year/:month/:day/:title/
